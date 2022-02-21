@@ -19,7 +19,8 @@ export default function Home() {
   const renderElement = useCallback(props => <Element {...props} />, []);
   const renderLeaf = useCallback(props => <Leaf {...props} />, []);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-
+  const [color, setColor] = useState("black")
+  // const colors = ['black', 'red', 'green', 'blue', 'yellow', 'grey', 'brown']
 
   return (
     <Slate editor={editor} value={value} onChange={value => setValue(value)}>
@@ -27,12 +28,14 @@ export default function Home() {
         <MarkButton format="bold" icon={<FaBold />} />
         <MarkButton format="italic" icon={<FaItalic />} />
         <MarkButton format="underline" icon={<FaUnderline />} />
+        <MarkButton format="color" icon="Highlight" />
         <MarkButton format="code" icon={<FaCode />} />
         <BlockButton format="heading-one" icon={<div><FaHeading /><sub>1</sub></div>} />
         <BlockButton format="heading-two" icon={<div><FaHeading /><sub>2</sub></div>} />
         <BlockButton format="block-quote" icon={<FaQuoteRight />} />
         <BlockButton format="numbered-list" icon={<FaListOl />} />
         <BlockButton format="bulleted-list" icon={<FaListUl />} />
+
       </div>
       <Editable
         renderElement={renderElement}
@@ -83,6 +86,7 @@ const toggleMark = (editor, format) => {
   } else {
     Editor.addMark(editor, format, true);
   }
+  console.log(Editor)
 };
 
 const isBlockActive = (editor, format) => {
@@ -118,6 +122,9 @@ const Element = ({ attributes, children, element }) => {
 };
 
 const Leaf = ({ attributes, children, leaf }) => {
+  if (leaf.color) {
+    children = <span style={{ color: "red",backgroundColor:"yellow",padding:"5px" }}>{children}</span>
+  }
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
